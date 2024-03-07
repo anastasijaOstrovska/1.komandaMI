@@ -64,6 +64,7 @@ def gajiena_parbaude (gajiena_tips, pasreizeja_virsotne):
            i = 0
            while i < len(sp.virsotnu_kopa):
                if sp.virsotnu_kopa[i].skaitlis == skaitlis and sp.virsotnu_kopa[i].p1 == p1 and sp.virsotnu_kopa[i].p2 == p2 and sp.virsotnu_kopa[i].bank == bank and sp.virsotnu_kopa[i].limenis == limenis:
+                   sp.virsotnu_kopa[pasreizeja_virsotne.id].child.append(sp.virsotnu_kopa[i].id)
                    return
                else:
                    i = i + 1
