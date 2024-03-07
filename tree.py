@@ -48,7 +48,7 @@ def gajiena_parbaude (gajiena_tips, pasreizeja_virsotne):
            # Punktu piešķiršana
            if skaitlis % 5 == 0:
                bank = bank + 1
-           elif skaitlis % 2 == 0:
+           if skaitlis % 2 == 0:
             match limenis%2:
                 case 1:
                     p1 = p1+1
@@ -74,8 +74,13 @@ def gajiena_parbaude (gajiena_tips, pasreizeja_virsotne):
     
 #tiek izsaukts spēles koka konstruktors, lai izveidotu tukšu koku        
 sp=Speles_koks()
+# Random skaitļa ģenerēšana kas dalās gan ar 2, gan ar 3
+while True:
+    random_skaitlis = random.randint(10000,20000)
+    if random_skaitlis%2 == 0 and random_skaitlis%3 == 0:
+        break
 #tiek izveidota sākumvirsotne spēles kokā
-sp.pievienot_virsotni(Virsotne([], 0, 1296, 0, 0, 0, 0))
+sp.pievienot_virsotni(Virsotne([], 0, random_skaitlis, 0, 0, 0, 0))
 
 #kamēr nav apskatītas visas saģenerētas virsotnes viena pēc otras
 i = 0
