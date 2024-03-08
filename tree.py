@@ -1,3 +1,4 @@
+import random
 #Klase kas atbilst virsotnei 
 class Virsotne:
     
