@@ -2,7 +2,7 @@
 
 1.komandas 1.projekta izstrādāšana
 
-Komandas dalībnieki - Anastasija Ostrovska, Helēna Anna Bunka, Megija Krista Miļūne, Lauris Jauntēvs, Sandis Šarkovskis
+Komandas dalībnieki - Anastasija Ostrovska, Helēna Anna Bunka, Megija Krista Miļūne, Lauris Jauntēvs, Sandis Šarkovskis.
 
 Tika pievienots Realizētais pamatalgoritms, kā arī pati spēle, kura satur grafisko vidi.
 
