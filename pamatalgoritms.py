@@ -1,70 +1,45 @@
-#Algoritms gajiena uztaisīšanai
-def gajiena_parbaude (gajiena_tips, pasreizeja_virsotne):
-    # Pārbaude vai skaitlis dalas ar 2, ja nē tad iziet no funkcijas
-    skaitlis = 0 #skaitļa vērtības inicializācija
-    if gajiena_tips == '2':
-        if pasreizeja_virsotne.skaitlis % 2 == 0:
-           skaitlis = int(pasreizeja_virsotne.skaitlis/2)
-        else:
-           return
-    # Pārbaude vai skaitlis dalas ar 3, ja nē tad iziet no funkcijas
-    if gajiena_tips == '3':
-        if pasreizeja_virsotne.skaitlis % 3 == 0:
-           skaitlis = int(pasreizeja_virsotne.skaitlis/3)
-        else:
-           return    
-    # Pārbaude vai galīgs skaitlis, ja nē tad taisa jauno virsotni  
-    if  pasreizeja_virsotne.skaitlis != 2 and pasreizeja_virsotne.skaitlis != 3:
+#Klase kas atbilst virsotnei
+class Virsotne:
 
-        limenis = pasreizeja_virsotne.limenis + 1
-        id = len(sp.virsotnu_kopa)
+    def __init__(self,child, id, skaitlis, p1, p2,bank, limenis, heir_funkcija):
+        self.child = child # virsotnes bērni
+        self.id = id # virsotnes id, lai meklētu vecāku
+        self.skaitlis = skaitlis # šobrid skaitlis
+        self.p1 = p1 # datora punkti
+        self.p2 = p2 # otra cilvēka punkti
+        self.bank = bank # kas šobrīd atrodas bankā
+        self.limenis = limenis # līmenis, uz kura atrodas virsotne
+        self.heir_funkcija = heir_funkcija # Heiristiskā funkcija
 
-        bank = pasreizeja_virsotne.bank
-        p1 = pasreizeja_virsotne.p1
-        p2 = pasreizeja_virsotne.p2
-        heir_funkcija = 0
+#Klase, kas atbilst spēles kokam        
+class Speles_koks:
 
-        # Punktu piešķiršana
-        if skaitlis % 5 == 0:
-            bank = bank + 1
-        if skaitlis % 2 == 0:
-            match limenis%2:
-                case 1:
-                    p1 = p1+1
-                case 0:
-                    p2 = p2+1
-        else :
-            match limenis%2:
-                case 1:
-                    p1 = p1-1
-                case 0:
-                    p2 = p2-1
-            # Pārbaude vai tāda virsotne jau eksistē vienā līmenī
-        i = 0
-        while i < len(sp.virsotnu_kopa):
-           if sp.virsotnu_kopa[i].skaitlis == skaitlis and sp.virsotnu_kopa[i].p1 == p1 and sp.virsotnu_kopa[i].p2 == p2 and sp.virsotnu_kopa[i].bank == bank and sp.virsotnu_kopa[i].limenis == limenis:
-               sp.virsotnu_kopa[pasreizeja_virsotne.id].child.append(sp.virsotnu_kopa[i].id)
-               return
-           else:
-               i = i + 1
-        jauna_virsotne=Virsotne([], id, skaitlis, p1, p2, bank, limenis, heir_funkcija)
-        sp.virsotnu_kopa[pasreizeja_virsotne.id].child.append(id)
-        sp.virsotnu_kopa.append(jauna_virsotne)
-#Tiek izsaukts spēles koka konstruktors, lai izveidotu tukšu koku        
-sp=Speles_koks()
+    # Inicializējam, ka koks būs List datustruktūra
+    def __init__(self):
+        self.virsotnu_kopa=[]
+    #Klases Speles_koks metode,
+    #kas pievieno spēles kokam jaunu virsotni, 
+    #kuru saņem kā argumentu
+    def pievienot_virsotni(self, Virsotne):
+        self.virsotnu_kopa.append(Virsotne)
 
-#Algoritms koka veidošanai uz 4 līmeņiem, skaitot sakotnējas virsotnes līmeni no 0
-def koka_veid(Virsotne):
-  #Tiek izveidota sākumvirsotne spēles kokā
-  sp.pievienot_virsotni(Virsotne)
-
-  #Kamēr nav apskatītas visas saģenerētas virsotnes viena pēc otras, līdz noteiktājām līmenīm
-  i = 0
-  while i < len(sp.virsotnu_kopa) and sp.virsotnu_kopa[i].limenis < 3:
-    pasreizeja_virsotne = sp.virsotnu_kopa[i]
-    gajiena_parbaude('2',pasreizeja_virsotne)
-    gajiena_parbaude('3',pasreizeja_virsotne)
-    i = i + 1
+#Funkcija, kas skaita, cik dalītāju ir virsotnei 
+#Ir skaitītie cik ir dalītāju - 2, 3, 5
+def count_2_3_5(skaitlis):
+  c2 = 0 # cik daudz dalītāju = 2
+  c3 = 0 # cik daudz dalītāju = 3
+  c5 = 0 # cik daudz dalītāju = 5
+  while True:
+    if skaitlis%5 == 0:
+      c5 = c5 + 1
+    if skaitlis%2 == 0:
+      c2 = c2 + 1
+      skaitlis = skaitlis/2
+    elif skaitlis%3 == 0:
+      c3 = c3 + 1
+      skaitlis = skaitlis/3
+    else:
+      return c2, c3, c5
 
 #Funkcija, kas aprēķina Heiristisko vērtību
 def heir_funkcija(tek_virsotne):
@@ -76,8 +51,8 @@ def heir_funkcija(tek_virsotne):
     skaitlis = tek_virsotne.skaitlis/((2**list[0])*(3**list[1]))
     # Galīgs skaitlis nav 2 vai 3
     if (skaitlis > 3):
-      # para limenis  + para skaitlis  & nepara limenis + nepara skaitlis  = datoram
-      # nepara limenis  + para skaitlis  & para limenis + nepara skaitlis  = cilvēkam
+      # nepara limenis  + para skaitlis  & para limenis + nepara skaitlis  = datoram
+      # para limenis  + para skaitlis  & nepara limenis + nepara skaitlis  = cilvēkam
 
       #tek_virsotne.limenis + list[0]+list[1] = cik daudz līmeņu vēl būs
       #tek_virsotne.bank + list[2] = cik daudz banks biegās
@@ -172,3 +147,75 @@ def alpha_beta(isMaxTurn, state, alpha, beta):
               break
       state.heir_funkcija = min_score
       return min_score
+
+#Algoritms gajiena uztaisīšanai
+def gajiena_parbaude (gajiena_tips, pasreizeja_virsotne):
+    # Pārbaude vai skaitlis dalas ar 2, ja nē tad iziet no funkcijas
+    skaitlis = 0 #skaitļa vērtības inicializācija
+    if gajiena_tips == '2':
+        if pasreizeja_virsotne.skaitlis % 2 == 0:
+           skaitlis = int(pasreizeja_virsotne.skaitlis/2)
+        else:
+           return
+    # Pārbaude vai skaitlis dalas ar 3, ja nē tad iziet no funkcijas
+    if gajiena_tips == '3':
+        if pasreizeja_virsotne.skaitlis % 3 == 0:
+           skaitlis = int(pasreizeja_virsotne.skaitlis/3)
+        else:
+           return    
+    # Pārbaude vai galīgs skaitlis, ja nē tad taisa jauno virsotni  
+    if  pasreizeja_virsotne.skaitlis != 2 and pasreizeja_virsotne.skaitlis != 3:
+
+        limenis = pasreizeja_virsotne.limenis + 1
+        id = len(sp.virsotnu_kopa)
+
+        bank = pasreizeja_virsotne.bank
+        p1 = pasreizeja_virsotne.p1
+        p2 = pasreizeja_virsotne.p2
+        heir_funkcija = 0
+
+        # Punktu piešķiršana
+        if skaitlis % 5 == 0:
+            bank = bank + 1
+        if skaitlis % 2 == 0:
+            match limenis%2:
+                case 1:
+                    p1 = p1+1
+                case 0:
+                    p2 = p2+1
+        else :
+            match limenis%2:
+                case 1:
+                    p1 = p1-1
+                case 0:
+                    p2 = p2-1
+            # Pārbaude vai tāda virsotne jau eksistē vienā līmenī
+        i = 0
+        while i < len(sp.virsotnu_kopa):
+           if sp.virsotnu_kopa[i].skaitlis == skaitlis and sp.virsotnu_kopa[i].p1 == p1 and sp.virsotnu_kopa[i].p2 == p2 and sp.virsotnu_kopa[i].bank == bank and sp.virsotnu_kopa[i].limenis == limenis:
+               sp.virsotnu_kopa[pasreizeja_virsotne.id].child.append(sp.virsotnu_kopa[i].id)
+               return
+           else:
+               i = i + 1
+        jauna_virsotne=Virsotne([], id, skaitlis, p1, p2, bank, limenis, heir_funkcija)
+        sp.virsotnu_kopa[pasreizeja_virsotne.id].child.append(id)
+        sp.virsotnu_kopa.append(jauna_virsotne)
+#Tiek izsaukts spēles koka konstruktors, lai izveidotu tukšu koku        
+sp=Speles_koks()
+
+#Laika skaitīšana inicializēšana
+#tkop = 0
+#Laika skaitīšana inicializēšana
+#count_dat_gaj = 0
+#Algoritms koka veidošanai uz 4 līmeņiem, skaitot sakotnējas virsotnes līmeni no 0
+def koka_veid(Virsotne):
+  #Tiek izveidota sākumvirsotne spēles kokā
+  sp.pievienot_virsotni(Virsotne)
+
+  #Kamēr nav apskatītas visas saģenerētas virsotnes viena pēc otras, līdz noteiktājām līmenīm
+  i = 0
+  while i < len(sp.virsotnu_kopa) and sp.virsotnu_kopa[i].limenis < 3:
+    pasreizeja_virsotne = sp.virsotnu_kopa[i]
+    gajiena_parbaude('2',pasreizeja_virsotne)
+    gajiena_parbaude('3',pasreizeja_virsotne)
+    i = i + 1
